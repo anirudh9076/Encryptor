@@ -18,6 +18,20 @@ def En_file():
 	wp.config(bg='grey')
 	b_open=Button(wp,text="choose file",width=30,command=choosefile).place(x=100,y=50)
 	wp.mainloop()
+	
+	def encryptor():
+		global path
+
+		f=open(path.name,'rb')
+		file=f.read()
+		f.close()
+		file=bytearray(file)
+		key=123
+		for index , value in enumerate(file):
+			file[index]=value^key
+		f1=open('newfile.jpg','wb')
+		f1.write(file)
+		f1.close()
 
 
 root=Tk()
