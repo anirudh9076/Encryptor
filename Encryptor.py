@@ -23,7 +23,7 @@ def Encrypt_file():
 		global path
 		global key
 		key=int(e_key.get())
-
+                s=lambda key:0 if key==0 else key%10+s(key//10)
 		f=open(path.name,'rb')
 		file=f.read()
 		f.close()
@@ -65,6 +65,7 @@ def Decrypt_file():
 		global path
 		global key
 		key=int(e_key.get())
+		s=lambda key:0 if key==0 else key%10+s(key//10)
 		f=open(path.name,'rb')
 		file=f.read()
 		f.close()
