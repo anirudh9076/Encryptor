@@ -4,7 +4,7 @@ from tkinter import *
 from tkinter import filedialog
 
 path=''
-key=123
+key=int()
 root=Tk()
 
 def Encrypt_file():
