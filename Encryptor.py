@@ -1,4 +1,4 @@
-import tkinter
+
 from tkinter import *
 
 from tkinter import filedialog
@@ -42,7 +42,7 @@ def Encrypt_file():
 	
 	wp.config(bg='grey')
 	b_open=Button(wp,text="choose file",width=30,command=choosefile).place(x=100,y=50)
-	b_back=Button(wp,text="Back",width=30,bg='red',command=wp.destroy).place(x=200,y=500)
+	b_back=Button(wp,text="Back",width=10,bg='sky blue',command=wp.destroy).place(x=200,y=400)
 	wp.mainloop()
 
 
@@ -77,17 +77,21 @@ def Decrypt_file():
 		f1.close()
 	
 	l2=Label(wp,text="Enter Encyption key").place(x=100,y=120)
-	b_encrypt=Button(wp,text="Decrypt",bg='red',command=decryptor).place(x=150,y=150)		
+	b_encrypt=Button(wp,text="Decrypt",bg='blue',command=decryptor).place(x=150,y=150)		
 	e_key=Entry(wp,width=50)
 	e_key.place(x=230,y=120)
 			
 	wp.config(bg='grey')
 	b_open=Button(wp,text="choose file",width=30,command=choosefile).place(x=100,y=50)
+	b_back=Button(wp,text="Back",width=10,bg='sky blue',command=wp.destroy).place(x=200,y=400)
 	wp.mainloop()
 
 
 
-root.geometry('500x600')
-b_file=Button(root,text="Encrypt file",bg='sky blue',fg='white',command=Encrypt_file).place(x=120,y=120)
-b_file=Button(root,text="decrypt file",bg='sky blue',fg='white',command=Decrypt_file).place(x=120,y=160)
+root.geometry('500x450')
+b_file=Button(root,text="Encrypt file",bg='sky blue',fg='black',command=Encrypt_file).place(x=120,y=120)
+b_file=Button(root,text="decrypt file",bg='sky blue',fg='black',command=Decrypt_file).place(x=120,y=160)
+quite_button=Button(root,text="Quit",bg='red',fg='black',command=root.quit).place(x=400,y=350)
+
+Labe_2=Label(root,text="Choose one option below:",fg="Blue").place(x=50,y=100)
 root.mainloop()
