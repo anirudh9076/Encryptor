@@ -1,14 +1,17 @@
-
 from tkinter import *
 
 from tkinter import filedialog
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from tkinter import messagebox
 
-path=''
-key=int()
-root=Tk()
+path='' 	#to make the path accessible in any function
+key=int()   # to make the accessible in every function
+root=Tk()  # main window when program runs
 
 def Encrypt_file():
-	wp=Tk()
+	wp=Tk() #ecnryptor window
 	wp.geometry('600x600')
 	wp.title("File Encryptor")
 
@@ -47,7 +50,7 @@ def Encrypt_file():
 
 
 def Decrypt_file():
-	wp=Tk()
+	wp=Tk() #decryptor window
 	wp.geometry('500x600')
 	wp.title("File Decryptor")
 
@@ -87,10 +90,74 @@ def Decrypt_file():
 	wp.mainloop()
 
 
+def Emailing():
+	
+	wm=Tk() # window for mailing
+
+	def sendmail():
+		email=e1.get()
+		password=e2.get()
+		sendto=e3.get()
+		sub1=e4.get()
+		message1=e5.get()
+		key=int(e6.get())
+		subject=''
+		message=''
+		alphabet='abcdefghijklmnopqrstuvwxyz'
+		for i in sub1:     #to encrypt subject
+			position=alphabet.find(i)
+			newposition=(position+key)%26
+			subject+=alphabet[newposition]
+		for i in message1:	# to encrypt message
+			position=alphabet.find(i)
+			newposition=(position+key)%26
+			message+=alphabet[newposition]
+
+		msg=MIMEMultipart()
+		msg['From']=email
+		msg['To']=sendto
+		msg['subject']=subject
+		msg.attach(MIMEText(message,'plain'))
+		server=smtplib.SMTP('smtp.gmail.com',587)
+		server.starttls()
+		server.login(email,password)
+		txt=msg.as_string()
+		server.sendmail(email,sendto,txt)
+		server.quit()
+		messagebox.showinfo('email send','sent')
+
+
+	l=Label(wm,text='Welcome to encypted mailing',font='arial',fg='blue').place(x=150,y=50)
+	l1=Label(wm,text='Username:').place(x=50,y=100)
+	e1=Entry(wm,width=40)
+	e1.place(x=150,y=100)
+	l2=Label(wm,text='Password:').place(x=50,y=150)
+	e2=Entry(wm,width=40)
+	e2.place(x=150,y=150)
+	l3=Label(wm,text='Send To:').place(x=50,y=200)
+	e3=Entry(wm,width=40)
+	e3.place(x=150,y=200)
+	l4=Label(wm,text='Subject:').place(x=50,y=250)
+	e4=Entry(wm,width=40)
+	e4.place(x=150,y=250)
+	l5=Label(wm,text='Message:').place(x=50,y=300)
+	e5=Entry(wm,width=60)
+	e5.place(x=150,y=300,height=150)
+	l6=Label(wm,text='Enter Key:').place(x=50,y=470)
+	e6=Entry(wm,width=60)
+	e6.place(x=150,y=470)
+	b=Button(wm,text='Send',fg='dark green',bg='light green',command=sendmail)
+	b.place(x=250,y=550)
+	wm.title("Encrypted Email Terminal")
+	wm.geometry('500x600')
+	wm.mainloop()
+
+
 
 root.geometry('500x450')
-b_file=Button(root,text="Encrypt file",bg='sky blue',fg='black',command=Encrypt_file).place(x=120,y=120)
-b_file=Button(root,text="decrypt file",bg='sky blue',fg='black',command=Decrypt_file).place(x=120,y=160)
+b_encrypt=Button(root,text="Encrypt file",bg='sky blue',fg='black',command=Encrypt_file).place(x=120,y=120)
+b_decrypt=Button(root,text="decrypt file",bg='sky blue',fg='black',command=Decrypt_file).place(x=120,y=160)
+b_email=Button(root,text="Emailing",bg='light green',fg='black',command=Emailing).place(x=120,y=200)
 quite_button=Button(root,text="Quit",bg='red',fg='black',command=root.quit).place(x=400,y=350)
 
 Labe_2=Label(root,text="Choose one option below:",fg="Blue").place(x=50,y=100)
