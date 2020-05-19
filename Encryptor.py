@@ -5,6 +5,9 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from tkinter import messagebox
+from email.mime.base import MIMEBase
+from email import encoders
+import os.path
 
 path='' 	#to make the path accessible in any function
 key=int()   # to make the accessible in every function
@@ -94,6 +97,14 @@ def Emailing():
 	
 	wm=Tk() # window for mailing
 
+
+
+	def choosefile():
+		global path
+		path=filedialog.askopenfile()
+		if path!='':
+			l1=Label(wm,text="File Choosen and ready to be encrypted",bg='yellow').pack()
+
 	def sendmail():
 		email=e1.get()
 		password=e2.get()
@@ -113,11 +124,37 @@ def Emailing():
 			newposition=(position+key)%26
 			message+=alphabet[newposition]
 
+
+
+		f=open(path.name,'rb')
+		file=f.read()
+		f.close()
+		file=bytearray(file)
+		for index , value in enumerate(file):
+			file[index]=value^key
+
+		f1=open('sendfile.jpg','wb')
+		f1.write(file)
+		f1.close()
+
+		
+		
+
 		msg=MIMEMultipart()
 		msg['From']=email
 		msg['To']=sendto
 		msg['subject']=subject
 		msg.attach(MIMEText(message,'plain'))
+
+
+		filename=os.path.basename('sendfile.jpg')
+		attachment=open(filename,'rb')
+		part=MIMEBase('application','octet.stream')
+		part.set_payload(attachment.read())
+		encoders.encode_base64(part)
+		part.add_header('Content-Disposition','attachment;filename="%s"'%filename)
+		msg.attach(part)
+
 		server=smtplib.SMTP('smtp.gmail.com',587)
 		server.starttls()
 		server.login(email,password)
@@ -142,10 +179,11 @@ def Emailing():
 	e4.place(x=150,y=250)
 	l5=Label(wm,text='Message:').place(x=50,y=300)
 	e5=Entry(wm,width=60)
-	e5.place(x=150,y=300,height=150)
+	e5.place(x=150,y=300,height=50)
 	l6=Label(wm,text='Enter Key:').place(x=50,y=470)
 	e6=Entry(wm,width=60)
 	e6.place(x=150,y=470)
+	b_open=Button(wm,text="choose file",width=30,command=choosefile).place(x=50,y=420)
 	b=Button(wm,text='Send',fg='dark green',bg='light green',command=sendmail)
 	b.place(x=250,y=550)
 	wm.title("Encrypted Email Terminal")
